@@ -19,7 +19,7 @@ const MongoClient = require('mongodb').MongoClient;
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.fbsgn.mongodb.net/freshvalley?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
-  const bookCollection = client.db("freshvalley").collection("products");
+  const elementCollection = client.db("freshvalley").collection("products");
   const customersCollection = client.db("freshvalley").collection("customers");
   
   app.post('/addOrder', (req, res) => {
@@ -40,15 +40,15 @@ client.connect(err => {
   })
 
   app.get('/products', (req, res) =>{
-    bookCollection.find()
+    elementCollection.find()
     .toArray( (err, items) =>{
       res.send(items);
     })
   })
 
   app.post('/addProducts', (req, res) => {
-    const newBook = req.body;
-    bookCollection.insertOne(newBook)
+    const newelement = req.body;
+    elementCollection.insertOne(newelement)
     .then(result => {
       res.send(result.insertedCount > 0);
     })
@@ -56,7 +56,7 @@ client.connect(err => {
 
   app.delete('/deleteProduct/:id', (req, res) =>{
     const id = ObjectID(req.params.id);
-    bookCollection.findOneAndDelete({_id: id})
+    elementCollection.findOneAndDelete({_id: id})
     .then(documents => res.send(documents.deleteCount > 0))
   })
 
